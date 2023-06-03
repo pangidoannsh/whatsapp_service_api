@@ -1,11 +1,11 @@
 const { Client, LocalAuth } = require('whatsapp-web.js');
 const axios = require('axios').default;
 require('dotenv').config();
-
+console.log(process.env.ACCESS_TOKEN);
 const api = axios.create({
     baseURL: process.env.BASE_URL,
     headers: {
-        Authorization: "Bearer 430aa6cc-9878-4c25-b667-409db5744b90"
+        Authorization: "Bearer " + process.env.ACCESS_TOKEN
     }
 })
 
@@ -47,17 +47,19 @@ client.on('ready', () => {
                 }
             });
         }).catch(err => {
-            console.log(err);
+            console.log(err.response.data);
         })
     }, 5000);
 });
 
 client.on('message', message => {
-    // console.log(message);
-    switch (message.body.toLowerCase()) {
-        case 'menu':
-            message.reply(`Hello ${message._data?.notifyName ?? ''} this your Menu!`);
-            break;
+
+    if (message.id.remote.includes('@c.us')) {
+        switch (message.body.toLowerCase()) {
+            case 'menu':
+                message.reply(`Hello ${message._data?.notifyName ?? ''} this your Menu!`);
+                break;
+        }
     }
 
 });
